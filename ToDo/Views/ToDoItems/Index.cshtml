@@ -1,0 +1,99 @@
+﻿@using System.Drawing
+@model IEnumerable<ToDo.Models.ToDoItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="align-content-center">Lista zadań</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a class="btn btn-primary align-content-center" asp-action="Create">Dodaj nowe zadanie</a>
+    </p>
+}
+
+
+
+<!-- Formularz filtrowania -->
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="🔍 Szukaj zadania..." value="@Context.Request.Query["search"]">
+    </div>
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="all"> 📌 Wszystkie </option>
+            <option value="completed"> ✅ Ukończone </option>
+            <option value="pending"> ⏳ W toku </option>
+
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">🔎 Filtruj</button>
+    </div>
+</form>
+
+<!-- Przyciski sortowania -->
+<div class="mb-3">
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=title_asc">🔼 Tytuł A-Z</a>
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=title_desc">🔽 Tytuł Z-A</a>
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=date_asc">📅 Termin ⬆</a>
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=date_desc">📅 Termin ⬇</a>
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=status">🔄 Status</a>
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=prority_asc">🔼 Piorytet</a>
+    <a class="btn btn-outline-secondary btn-sm" href="?sortOrder=prority_desc">🔽 Piorytet</a>
+</div>
+
+
+<div class="row">
+    @foreach (var todo in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-@((todo.IsCompleted) ? "success" : "warning")">
+                <div class="card-body">
+                    <h5 class="card-title">@todo.Title</h5>
+                    <p class="card-text text-muted">@todo.Description</p>
+
+                    <p>
+                        <strong>Piorytet:</strong>
+
+                        @if (todo.Priority == 1)
+                        {
+                            <span style="color:blue">Mało Ważne</span>
+                        }
+                        else if (todo.Priority == 2)
+                        {
+                            <span style="color:yellow">Ważne</span>
+                        }
+                        else
+                        {
+                            <span style="color:red">Bardzo Ważne</span>
+                        }
+
+                    </p>
+
+                    <p>
+                        <strong>Dodane:</strong> @(todo.CreatedAt.ToString("yyyy-MM-dd") ?? "Brak")
+                        <strong>Termin:</strong> @(todo.DueDate?.ToString("yyyy-MM-dd") ?? "Brak")
+                    </p>
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-@(todo.IsCompleted ? "success" : "warning")">
+                            @(todo.IsCompleted ? "✅ Ukończone" : "⏳ W toku")
+                        </span>
+                    </p>
+
+                    <div class="d-flex justify-content-between">
+                        <a class="btn btn-outline-warning btn-sm" href="@Url.Action("Edit", new { id = todo.Id })">✏ Edytuj</a>
+                        <a class="btn btn-outline-danger btn-sm" href="@Url.Action("Delete", new { id = todo.Id })">🗑 Usuń</a>
+                        @if (!todo.IsCompleted)
+                        {
+                            <a class="btn btn-outline-success btn-sm" href="@Url.Action("Complete", new { id = todo.Id })">✔ Zakończ</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

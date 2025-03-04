@@ -1,0 +1,36 @@
+﻿@model ToDo.Models.ToDoItem
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+    🗑 Usuń zadanie
+</button>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">🛑 Potwierdzenie usunięcia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+            </div>
+            <div class="modal-body">
+                <p>Czy na pewno chcesz usunąć zadanie: <strong>@Model.Title</strong>?</p>
+                <p class="text-muted">Tej operacji nie można cofnąć.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id">
+                    <button type="submit" class="btn btn-danger">Tak, usuń</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a class="btn btn-outline-secondary" href="@Url.Action("Index")">⬅ Powrót do listy</a>
+</div>
+

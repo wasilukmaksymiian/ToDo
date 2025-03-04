@@ -1,0 +1,62 @@
+﻿@model ToDo.Models.ToDoItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">➕ Dodaj nowe zadanie</h3>
+
+            <form asp-action="Edit" method="post">
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Tytuł</label>
+                    <input asp-for="Title" class="form-control" placeholder="Wpisz tytuł zadania" required>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Opis</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Opcjonalny opis"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Priority" class="form-label">Piorytet</label>
+                    <input asp-for="Priority" class="form-control" placeholder="Piorytet">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CreatedAt" class="form-label">Termin rozpoczęcia</label>
+                    <input asp-for="CreatedAt" type="date" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DueDate" class="form-label">Termin zakończenia</label>
+                    <input asp-for="DueDate" type="date" class="form-control">
+                </div>
+                <div class="form-check mb-3">
+                    <input asp-for="IsCompleted" class="form-check-input">
+                    <label asp-for="IsCompleted" class="form-check-label">Czy ukończone?</label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label">Uzytkownik</label>
+                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                </div>
+                <br />
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">✅ Edytuj zadanie</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <a class="btn btn-outline-secondary" href="@Url.Action("Index")">⬅ Powrót do listy</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
